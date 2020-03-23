@@ -10,7 +10,8 @@ import random
 build = "0.01"
 screen_width = 100
 # global variable controlling the time.sleep function length for faster debugging
-run_time = 0
+run_time = 0.03
+wait_time = 1
 
 # Player Setup
 class player:
@@ -94,7 +95,6 @@ UP = 'up', 'north'
 DOWN = 'down', 'south'
 LEFT = 'left', 'west'
 RIGHT = 'right', 'east'
-
 
 solved_places = {'a1': False, 'a2': False, 'a3': False, 'a4': False,
                 'b1': False, 'b2': False, 'b3': False, 'b4': False,
@@ -302,27 +302,27 @@ def prompt():
     if action.lower() == 'quit':
         sys.exit()
     elif action.lower() in ['move', 'go', 'travel', 'walk']:
-        player_move(action.lower())
+        player_move()
     elif action.lower() in ['examine', 'inspect', 'interact', 'look']:
         player_examine(action.lower())
 
-def player_move(myAction):
+def player_move():
     ask = 'Where would you like to move to?\n'
     dest = input(ask)
     if dest in ['up', 'north']:
         destination = zonemap[myPlayer.location] [UP]
-        movement_handler(destination)
     elif dest in ['left', 'west']:
         destination = zonemap[myPlayer.location] [LEFT]
-        movement_handler(destination)
     elif dest in ['right', 'east']:
         destination = zonemap[myPlayer.location] [RIGHT]
-        movement_handler(destination)
     elif dest in ['down', 'south']:
         destination = zonemap[myPlayer.location] [DOWN]
-        movement_handler(destination)
     else:
-        player_move(myAction)
+        player_move()
+    if destination == '':
+        print ("That way is blocked.")
+        main_game_loop()
+    movement_handler(destination)
 
 def movement_handler(destination):
     print('\n' + 'You have moved to ' + destination + '.')
@@ -343,9 +343,9 @@ def main_game_loop():
 
 # game functionality
 def setup_game():
-    global run_time
+    global wait_time
     type_writer('The year is 1890. After \na failed lab experiment in \nGermany, mutated beings began plagueing \nthe land. Hunting and destroying \nthe beasts is humanities only option.')
-    time.sleep(run_time)
+    time.sleep(wait_time)
     os.system('cls')
 
     # request name
@@ -388,7 +388,7 @@ def setup_game():
     myPlayer.role = str(player_role)
     print(str(player_role) + ' info: ' + rolemap[player_role] ['description'])
     myPlayer.role = player_role
-    time.sleep(run_time)
+    time.sleep(5 )
     os.system('cls')
     main_game_loop()
 
